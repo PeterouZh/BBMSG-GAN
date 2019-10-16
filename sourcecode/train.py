@@ -1,6 +1,6 @@
 """ script for training the MSG-GAN on given dataset """
 
-import argparse
+import argparse, os
 
 import numpy as np
 import torch as th
@@ -183,7 +183,7 @@ def parse_arguments():
     return args
 
 
-def main(args):
+def main(args, myargs=None):
     """
     Main function for the script
     :param args: parsed command line arguments
@@ -224,7 +224,8 @@ def main(args):
                       use_eql=args.use_eql,
                       use_ema=args.use_ema,
                       ema_decay=args.ema_decay,
-                      device=device)
+                      device=device,
+                      myargs=myargs)
 
     if args.generator_file is not None:
         # load the weights into generator
@@ -303,6 +304,18 @@ def main(args):
         fid_real_stats=args.fid_real_stats,
         fid_batch_size=args.fid_batch_size
     )
+
+
+def run(args1, myargs):
+  myargs.config = getattr(myargs.config, args1.command)
+  myargs.args = args1
+  args = parse_arguments()
+  for k, v in myargs.config.items():
+    setattr(args, k, v)
+  args.images_dir = os.path.expanduser(args.images_dir)
+  args.model_dir = myargs.args.outdir
+  main(args, myargs)
+  pass
 
 
 if __name__ == '__main__':

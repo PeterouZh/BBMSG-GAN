@@ -227,9 +227,11 @@ class MSG_GAN:
 
     def __init__(self, depth=7, latent_size=512,
                  use_eql=True, use_ema=True, ema_decay=0.999,
-                 device=th.device("cpu")):
+                 device=th.device("cpu"),
+                 myargs=None):
         """ constructor for the class """
         from torch.nn import DataParallel
+        self.myargs = myargs
 
         self.gen = Generator(depth, latent_size, use_eql=use_eql).to(device)
 
@@ -500,7 +502,8 @@ class MSG_GAN:
         print("Starting the training process ... ")
 
         # create the summary writer
-        sum_writer = SummaryWriter(os.path.join(log_dir, "tensorboard"))
+        sum_writer = self.myargs.writer
+        # sum_writer = SummaryWriter(os.path.join(log_dir, "tensorboard"))
 
         # create a grid of samples and save it
         reses = [str(int(np.power(2, dep))) + "_x_"
