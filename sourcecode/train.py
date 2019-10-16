@@ -313,7 +313,10 @@ def run(args1, myargs):
   for k, v in myargs.config.items():
     setattr(args, k, v)
   args.images_dir = os.path.expanduser(args.images_dir)
-  args.model_dir = myargs.args.outdir
+  args.model_dir = myargs.args.ckptdir
+  args.sample_dir  = myargs.args.imgdir
+  args.fid_temp_folder = os.path.join(myargs.args.outdir, 'fid_temp_folder')
+  args.fid_real_stats = os.path.expanduser(args.fid_real_stats)
   main(args, myargs)
   pass
 

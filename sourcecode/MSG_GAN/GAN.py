@@ -639,6 +639,8 @@ class MSG_GAN:
                     # add summary of the losses
                     sum_writer.add_scalar("dis_loss", dis_loss, global_step)
                     sum_writer.add_scalar("gen_loss", gen_loss, global_step)
+                    self.myargs.textlogger.log(
+                        global_step, dis_loss=dis_loss, gen_loss=gen_loss)
 
                     # also write the losses to the log file:
                     if log_dir is not None:
@@ -712,7 +714,7 @@ class MSG_GAN:
 
                     # generate the images:
                     print("generating images for fid calculation ...")
-                    pbar = tqdm(total=num_fid_images)
+                    pbar = tqdm(total=num_fid_images, file=self.myargs.stdout)
                     generated_images = 0
 
                     while generated_images < num_fid_images:
@@ -745,6 +747,7 @@ class MSG_GAN:
 
                     # log the fid value in tensorboard:
                     sum_writer.add_scalar("FID", fid, epoch)
+                    self.myargs.textlogger.log(epoch, fid=fid)
                     # note that for fid value, the global step is the epoch number.
                     # it is not the global step. This makes the fid graph more informative
 
