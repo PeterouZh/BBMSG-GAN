@@ -1,3 +1,6 @@
 [submodule "submodule/template_lib"]
 	path = submodule/template_lib
 	url = https://github.com/PeterouZh/template_lib.git
+[submodule "BBMSG-GAN-exp"]
+	path = BBMSG-GAN-exp
+	url = https://github.com/PeterouZh/BBMSG-GAN-exp.git
