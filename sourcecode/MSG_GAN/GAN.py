@@ -9,6 +9,7 @@ import copy
 import numpy as np
 import torch as th
 
+from template_lib.utils import modelarts_utils
 
 class Generator(th.nn.Module):
     """ Generator of the GAN network """
@@ -525,6 +526,8 @@ class MSG_GAN:
         # create a global time counter
         global_time = time.time()
         global_step = 0
+        modelarts_utils.modelarts_sync_results(
+            args=self.myargs.args, myargs=self.myargs, join=True)
 
         for epoch in range(start, num_epochs + 1):
             start_time = timeit.default_timer()  # record time at the start of epoch
@@ -752,8 +755,12 @@ class MSG_GAN:
                     # it is not the global step. This makes the fid graph more informative
 
                     # ==================================================================
+            modelarts_utils.modelarts_sync_results(
+                args=self.myargs.args, myargs=self.myargs, join=False)
 
         print("Training completed ...")
+        modelarts_utils.modelarts_sync_results(
+            args=self.myargs.args, myargs=self.myargs, join=True, end=True)
 
         # return the generator and discriminator back to eval mode
         self.gen.eval()
